@@ -3,6 +3,7 @@ This is a local small business/organization.
 <pre>Using language:Php,html,Css,Java-Script</pre>
 The site must have a minimum of six primary areas: (1) Homepage, (2) About Page, (3) Services and/or Products, (4) Contact, (5) User Profile, (6) Administrator Only.
 <br>
+<hr>
 ### • Homepage: 
 The homepage will have an overview of the business/organization, site announcements, and login for both users and admin access.
 ### •	About Page: 
