@@ -175,10 +175,46 @@
     $data['valid'] = $valid;
     return $data;
   }
-  function addProductForm($product_name = '', $product_price = '', $product_description = '', $category_id = '', $validate = false)
-  {
 
+
+  // Add product form////////////////////////////////////////////////
+
+  function addProductForm($product_name = '', $product_price = '',$product_description = '',$validate = false)
+  {
+   $valid = false;
+    $form = "<div>";
+    $form .= "<form action='admin.php' method='post'>";
+    $data = commonHtmlFormTag('Product Name', 'product_name', 'text', $product_name, array('required' => true), $validate);
+    $form .= $data['print'];
+    $valid = $data['valid'];
+
+      $form .= "<br>";
+    $data = commonHtmlFormTag('Product Price', 'product_price', 'text', $product_price, array('required' => true), $validate);
+    $form .= $data['print'];
+    $valid = $data['valid'];
+
+   $form .= "<br>";
+    $data = commonHtmlFormTag('Product Description', 'product_description', 'text', $product_description, array('required' => true), $validate);
+    $form .= $data['print'];
+    $valid = $data['valid'];
+
+    $form .= "<br><br>";
+    $data = commonHtmlFormTag('', 'add_product', 'submit', 'Add Product');
+    $form .= $data['print'];
+    $form .= "</form>";
+    $form .= "</div>";
+    $data['print'] = $form;
+    $data['valid'] = $valid;
+
+
+
+    return $data;
   }
+
+
+
+  // Add Category form////////////////////////////////////////////////
+
   function addCategoryForm($category_name = '', $validate = false)
   {
     $valid = false;
@@ -196,6 +232,39 @@
     $data['valid'] = $valid;
     return $data;
   }
+
+
+
+
+  function updateProductForm($product_name = '', $product_price='',$product_description='',$validate = false)
+  {
+    $valid = false;
+    $form = "<div>";
+    $form .= "<form action='admin.php' method='post'>";
+    $data = commonHtmlFormTag('Product Name', 'product_name', 'text', $product_name, array('required' => true), $validate);
+    $form .= $data['print'];
+    $valid = $data['valid'];
+  $form .= "<br>";
+   $data = commonHtmlFormTag('Product Price', 'product_price', 'text', $product_price, array('required' => true), $validate);
+    $form .= $data['print'];
+    $valid = $data['valid'];
+     $form .= "<br>";
+   $data = commonHtmlFormTag('Product Description', 'product_description', 'text', $product_description, array('required' => true), $validate);
+    $form .= $data['print'];
+    $valid = $data['valid'];
+
+    $form .= "<br><br>";
+    $data = commonHtmlFormTag('', 'update_product', 'submit', 'Update Product');
+    $form .= $data['print'];
+    $form .= "</form>";
+    $form .= "</div>";
+    $data['print'] = $form;
+    $data['valid'] = $valid;
+    return $data;
+  }
+
+
+
   function updateCategoryForm($category_name = '', $validate = false)
   {
     $valid = false;

@@ -67,6 +67,20 @@
     } else {
       return false;
     }
+
+  }
+
+  function addProduct($product_name,$product_price,$product_description)
+  {
+    $db = mysqli_connect("localhost", USERNAME, PASSWORD, DATABASE);
+    $sql = "INSERT INTO `product` (`product_name`,`product_price`,`product_description`) VALUES ('{$product_name}','{$product_price}','{$product_description}')";
+    $result = mysqli_query($db, $sql);
+    mysqli_close($db);
+    if($result) {
+      return true;
+    } else {
+      return false;
+    }
   }
   function getAllFoodCategories()
   {
@@ -98,6 +112,58 @@
       return 0;
     }
   }
+
+
+ function getProductNameById($product_id)
+  {
+    $db = mysqli_connect("localhost", USERNAME, PASSWORD, DATABASE);
+    $sql = "SELECT `product_name` FROM `product` WHERE `id`='{$product_id}'";
+    $result = mysqli_query($db, $sql);
+    if(mysqli_num_rows($result) == 1) {
+      mysqli_close($db);
+
+      $row = mysqli_fetch_row($result);
+      return $row[0];
+
+    } else {
+      mysqli_close($db);
+      return 0;
+    }
+  }
+
+ function getProductPriceById($product_id)
+  {
+    $db = mysqli_connect("localhost", USERNAME, PASSWORD, DATABASE);
+    $sql = "SELECT `product_price` FROM `product` WHERE `id`='{$product_id}'";
+    $result = mysqli_query($db, $sql);
+    if(mysqli_num_rows($result) == 1) {
+      mysqli_close($db);
+
+      $row = mysqli_fetch_row($result);
+      return $row[0];
+
+    } else {
+      mysqli_close($db);
+      return 0;
+    }
+  }
+
+   function getProductDescriptionById($product_id)
+  {
+    $db = mysqli_connect("localhost", USERNAME, PASSWORD, DATABASE);
+    $sql = "SELECT `product_description` FROM `product` WHERE `id`='{$product_id}'";
+    $result = mysqli_query($db, $sql);
+    if(mysqli_num_rows($result) == 1) {
+      mysqli_close($db);
+
+      $row = mysqli_fetch_row($result);
+      return $row[0];
+
+    } else {
+      mysqli_close($db);
+      return 0;
+    }
+  }
   function updateCategoryNameById($category_name, $category_id)
   {
     $db = mysqli_connect("localhost", USERNAME, PASSWORD, DATABASE);
@@ -110,6 +176,20 @@
       return false;
     }
   }
+
+function updateProductNameById($product_name, $product_id)
+  {
+    $db = mysqli_connect("localhost", USERNAME, PASSWORD, DATABASE);
+    $sql = "UPDATE `product` SET `product_name` = '{$product_name}' WHERE `id`='{$product_id}'";
+    $result = mysqli_query($db, $sql);
+    mysqli_close($db);
+    if($result) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   function getAllProductsByCategoryOrSearch($category_id = '', $search = '')
   {
     $db = mysqli_connect("localhost", USERNAME, PASSWORD, DATABASE);
@@ -137,6 +217,17 @@
       return $row;
     }
   }
+
+function getAllproductNames()
+  {
+    $db = mysqli_connect("localhost", USERNAME, PASSWORD, DATABASE);
+    $sql = "SELECT `product_name`, `id`, `id` FROM `product`";
+    $result = mysqli_query($db, $sql);
+    mysqli_close($db);
+    return $result;
+  }
+
+
   function checkForUser($user_name, $user_password)
   {
     $user_password = md5($user_password);

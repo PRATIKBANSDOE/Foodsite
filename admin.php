@@ -24,10 +24,20 @@
     } elseif (isset($_POST['add_category'])) {
       $validate = true;
       $_SESSION['add_category'] = true;
-    } elseif (isset($_POST['update_category'])) {
+    } elseif (isset($_POST['add_product'])) {
+      $validate = true;
+      $_SESSION['add_product'] = true;
+    }elseif (isset($_POST['update_category'])) {
       $validate = true;
       $_SESSION['update_category'] = true;
+
     }
+    elseif (isset($_POST['update_product'])) {
+      $validate = true;
+      $_SESSION['update_product'] = true;
+  
+    }
+
   } else {
     if (isset($_SESSION['task_subject'])) {
       if (isset($_GET['delete'])) {
@@ -44,13 +54,22 @@
           } elseif ($table == 'category') {
             $_SESSION['category_deleted'] = deleteRowFromTableById($table, $id);
           }
+           elseif ($table == 'product') {
+            $_SESSION['product_deleted'] = deleteRowFromTableById($table, $id);
+          }
         }
-      } elseif (isset($_GET['edit'])) {
+      } 
+
+      elseif (isset($_GET['edit'])) {
         if (is_numeric($_GET['edit'])) {
           $table = $_SESSION['task_subject'];
           $id = $_GET['edit'];
           $_SESSION['category_name'] = getCategoryNameById($id);
           $_SESSION['category_id'] = $id;
+          $_SESSION['product_name'] = getProductNameById($id);
+          $_SESSION['product_price'] = getProductPriceById($id);
+          $_SESSION['product_description']=getProductDescriptionById($id);
+          $_SESSION['product_id'] = $id;
         }
       }
     }
@@ -181,6 +200,9 @@
         echo $table;
         }
       ?>
+
+        <!-- For Category //////////////////////////////////////////////////////////////-->
+
       <?php if (isset($_SESSION['task_subject']) && ($_SESSION['task_subject'] == "category")) {
         if(isset($_SESSION['category_added'])) {
           if ($_SESSION['category_added']) {
@@ -236,6 +258,93 @@
         echo $table;
         }
       ?>
+
+    <!-- For Product ////////////////////////////////////////////////////////////////-->
+
+<?php if (isset($_SESSION['task_subject']) && ($_SESSION['task_subject'] == "product")) {
+
+        if(isset($_SESSION['product_added'])) {
+          if ($_SESSION['product_added']) {
+            echo "<p>Product Successfully Added.</p>";
+          } else {
+            echo "<p class='error'>Unknown problem occured. Try again.</p>";
+          }
+          unset($_SESSION['product_added']);
+        }
+
+        $product_name = "";
+        $product_price="";
+        $product_description="";
+
+        if (isset($_SESSION['product_name'])) {
+          $product_name = $_SESSION['product_name'];
+          $product_price=$_SESSION['product_price'];
+          $product_description=$_SESSION['product_description'];
+          unset($_SESSION['product_name']);
+          unset($_SESSION['product_price']);
+          unset($_SESSION['product_description']);
+          $data = updateProductForm($product_name,$product_price,$product_description,$validate);
+          if ($validate) {
+            if ($data['valid']) {
+              $valid++;
+            }
+          }
+          echo $data['print'];
+        }
+
+
+         else {
+          if (isset($_POST['product_name'])){
+           $product_name = $_POST['product_name'];
+           $product_price=$_POST['product_price'];
+           $product_description=$_POST['product_description'];
+         }
+          $data = addProductForm($product_name,$product_price,$product_description,$validate);
+
+          if ($validate) {
+            if ($data['valid']) {
+              $valid++;
+            }
+          }
+          echo $data['print'];
+        }
+
+        echo "<br />";
+        $result = getAllproductNames();
+        $data = resultToData($result);
+        $headings = array('Product Name','Edit Action', 'Delete Action');
+        $caption = "All Product Names";
+        $table = printTable($data, $headings, $caption, (-1), false, array(1, 2), array('admin.php', 'admin.php'), array('change', 'Remove'), array('edit', 'delete'));
+        
+        if(isset($_SESSION['product_deleted'])) {
+          if ($_SESSION['product_deleted']) {
+            echo "<p>Product Successfully Deleted.</p>";
+          } else {
+            echo "<p class='error'>Unknown problem occured. Try again.</p>";
+          }
+          unset($_SESSION['product_deleted']);
+        }
+
+
+        if(isset($_SESSION['product_changed'])) {
+          if ($_SESSION['product_changed']) {
+            echo "<p>Product Successfully Changed.</p>";
+          } else {
+            echo "<p class='error'>Unknown problem occured. Try again.</p>";
+          }
+          unset($_SESSION['product_changed']);
+        }
+        echo $table;
+        }
+      ?>
+
+
+
+
+
+
+
+
       <?php if (isset($_SESSION['task_subject']) && ($_SESSION['task_subject'] == "user")) {
         $result = getAllUserInfo();
         $data = resultToData($result);
@@ -254,6 +363,7 @@
         }
       ?>
     </div>
+
     <?php if (!isset($_SESSION['task_subject'])) { ?>
       <?php
         if ($validate) {
@@ -272,6 +382,7 @@
           }
         }
       ?>
+
     <?php } elseif (($_SESSION['task_subject'] == "category") && (isset($_SESSION['add_category']))) { ?>
       <?php
         unset($_SESSION['add_category']);
@@ -282,11 +393,24 @@
           }
         }
       ?>
+      <?php } elseif (($_SESSION['task_subject'] == "product") && (isset($_SESSION['add_product']))) { ?>
+      <?php
+        unset($_SESSION['add_product']);
+        if ($validate) {
+          if ($valid == 1) {
+            $_SESSION['product_added'] = addProduct($product_name,$product_price,$product_description);
+            header("Location: admin.php");
+          }
+        }
+      ?>
+
     <?php } elseif (($_SESSION['task_subject'] == "category") && (isset($_SESSION['update_category']))) { ?>
       <?php
+      
         unset($_SESSION['update_category']);
         if ($validate) {
           if ($valid == 1) {
+
             $id = $_SESSION['category_id'];
             unset($_SESSION['category_id']);
             $_SESSION['category_changed'] = updateCategoryNameById($category_name, $id);
@@ -297,7 +421,31 @@
           }
         }
       ?>
+
+        <?php } elseif (($_SESSION['task_subject'] == "product") && (isset($_SESSION['update_product']))) { ?>
+      <?php
+       
+        unset($_SESSION['update_product']);
+
+        if ($validate) {
+           
+          if ($valid == 1) {
+
+            $id = $_SESSION['product_id'];
+            unset($_SESSION['product_id']);
+            $_SESSION['product_changed'] = updateProductNameById($product_name, $id);
+            header("Location: admin.php");
+          } else {
+            $_SESSION['product_name'] = getProductNameById($_SESSION['product_id']);
+            $_SESSION['product_price'] = getProductPriceById($_SESSION['product_id']);
+            $_SESSION['product_description']=getProductDescriptionById($_SESSION['product_description']);
+            header("Location: admin.php");
+          }
+        }
+      ?>
     <?php } ?>
+
+
     <div id="subcontent">
       This is the admin's private page. Only the admin (after logging in) can access this page.
       <br/><br/>

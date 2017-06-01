@@ -1,5 +1,6 @@
 <?php
-  define("USERNAME", "personal");
-  define("PASSWORD", "personal");
+  define("USERNAME", "root");
+  define("PASSWORD", "");
   define("DATABASE", "small_business_db");
+  
 ?>
