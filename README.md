@@ -6,6 +6,7 @@ The site must have a minimum of six primary areas: (1) Homepage, (2) About Page,
 <hr>
 ### • Homepage: 
 The homepage will have an overview of the business/organization, site announcements, and login for both users and admin access.
+</hr>
 ### •	About Page: 
 This page will have basic information about the business/organization.
 ### •	Services and/or Products:
